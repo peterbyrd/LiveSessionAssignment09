@@ -3,18 +3,27 @@
 
 # mean amount paid by medicare, total accomodation charges, and total department charges
 mean.amtreim <- format(mean(chf$AmtReim), big.mark=",",big.interval=3,digits=2,nsmall=2)
+mean.amtreim
 mean.TotAccomChg <- format(mean(chf$TotAccomChg), big.mark=",",big.interval=3,digits=2,nsmall=2)
+mean.TotAccomChg
 mean.TotDeptChg <- format(mean(chf$TotDeptChg), big.mark=",",big.interval=3,digits=2,nsmall=2)
+mean.TotDeptChg
 
 # standard deviation 
 std.amtreim <- format(sd(chf$AmtReim), big.mark=",",big.interval=3,digits=2,nsmall=2)
+std.amtreim
 std.TotAccomChg <- format(sd(chf$TotAccomChg),big.mark=",",big.interval=3,digits=2,nsmall=2)
+std.TotAccomChg
 std.TotDeptChg <- format(sd(chf$TotDeptChg),big.mark=",",big.interval=3,digits=2,nsmall=2)
+std.TotDeptChg
 
 # use tapply()
 meanbysex.amtreim <- format(tapply(chf$AmtReim,chf$Sex2,mean),big.mark=",",big.interval=3,digits=2,nsmall=2)
+meanbysex.amtreim
 meanbysex.TotAccomChg <- format(tapply(chf$TotAccomChg,chf$Sex2,mean),big.mark=",",big.interval=3,digits=2,nsmall=2)
+meanbysex.TotAccomChg
 meanbysex.TotDeptChg <- format(tapply(chf$TotDeptChg,chf$Sex2,mean),big.mark=",",big.interval=3,digits=2,nsmall=2)
+meanbysex.TotDeptChg
 
 # boxplot
 chf.m <- melt(chf,measure=c("AmtReim","TotAccomChg","TotDeptChg"),variable.name="Finance")

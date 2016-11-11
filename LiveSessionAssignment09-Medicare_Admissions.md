@@ -1,11 +1,6 @@
----
-title: "LiveSessionAssignment09-Medicare Admissions"
-author: "Peter Byrd"
-date: "November 11, 2016"
-output: 
-  html_document:
-    keep_md: true
----
+# LiveSessionAssignment09-Medicare Admissions
+Peter Byrd  
+November 11, 2016  
 
 # Exploratory Data Analysis of Medicare Admissions
 
@@ -16,13 +11,40 @@ This analysis pulls data from the MedPAR dataset that is distributed by CMS, the
 ## Load data
 First we must install packages and load the appropriate data from our data source.
 
-```{r}
+
+```r
 ## Set the working directory and load packages
 setwd("/Users/pbyrd/Git/LiveSessionAssignment09")
 
 ## Need to install the following packages: ggplot2 and plotly
 library('ggplot2')
 library('plotly')
+```
+
+```
+## 
+## Attaching package: 'plotly'
+```
+
+```
+## The following object is masked from 'package:ggplot2':
+## 
+##     last_plot
+```
+
+```
+## The following object is masked from 'package:stats':
+## 
+##     filter
+```
+
+```
+## The following object is masked from 'package:graphics':
+## 
+##     layout
+```
+
+```r
 library('reshape2')
 
 ## Read CSV input file
@@ -33,7 +55,8 @@ chf <- read.csv("Data/CHF.csv", header=TRUE)
 
 The data is relatively clean, but we need to add a few variables and rename a few variables to make the analysis easier.  This will create our final clean dataset.
 
-```{r}
+
+```r
 # clean and categorize 
 chf[chf$Age == 1, "AgeGrp"] = "less than 25"
 chf[chf$Age == 2, "AgeGrp"] = "25-44"
@@ -62,14 +85,33 @@ Now that we have a clean dataset, we want to run some analysis on the data.
 
 ### Mean for Amount Paid by Medicare, Total Accommodations Charges, and Total Departmental Charges
 
-```{r}
+
+```r
 # mean amount paid by medicare, total accomodation charges, and total department charges
 mean.amtreim <- format(mean(chf$AmtReim), big.mark=",",big.interval=3,digits=2,nsmall=2)
 mean.amtreim
+```
+
+```
+## [1] "8,324.90"
+```
+
+```r
 mean.TotAccomChg <- format(mean(chf$TotAccomChg), big.mark=",",big.interval=3,digits=2,nsmall=2)
 mean.TotAccomChg
+```
+
+```
+## [1] "18,675.75"
+```
+
+```r
 mean.TotDeptChg <- format(mean(chf$TotDeptChg), big.mark=",",big.interval=3,digits=2,nsmall=2)
 mean.TotDeptChg
+```
+
+```
+## [1] "18,729.44"
 ```
 
 The mean values for each variable are listed here:
@@ -79,14 +121,33 @@ The mean values for each variable are listed here:
 
 ### Standard deviation for Amount Paid by Medicare, Total Accomodation Charges, and Total Departmental Charges
 
-```{r}
+
+```r
 # standard deviation 
 std.amtreim <- format(sd(chf$AmtReim), big.mark=",",big.interval=3,digits=2,nsmall=2)
 std.amtreim
+```
+
+```
+## [1] "3,164.95"
+```
+
+```r
 std.TotAccomChg <- format(sd(chf$TotAccomChg),big.mark=",",big.interval=3,digits=2,nsmall=2)
 std.TotAccomChg
+```
+
+```
+## [1] "17,922.97"
+```
+
+```r
 std.TotDeptChg <- format(sd(chf$TotDeptChg),big.mark=",",big.interval=3,digits=2,nsmall=2)
 std.TotDeptChg
+```
+
+```
+## [1] "20,102.60"
 ```
 
 The standard deviations for each variable are listed here:
@@ -96,14 +157,36 @@ The standard deviations for each variable are listed here:
 
 ### Use tapply() to calculate mean for Amount Paid by Medicare, Total Accomodataion Charges, adn Total Department Charges, by Gender
 
-```{r}
+
+```r
 # use tapply()
 meanbysex.amtreim <- format(tapply(chf$AmtReim,chf$Sex2,mean),big.mark=",",big.interval=3,digits=2,nsmall=2)
 meanbysex.amtreim
+```
+
+```
+##     Female       Male 
+## "8,439.62" "8,213.66"
+```
+
+```r
 meanbysex.TotAccomChg <- format(tapply(chf$TotAccomChg,chf$Sex2,mean),big.mark=",",big.interval=3,digits=2,nsmall=2)
 meanbysex.TotAccomChg
+```
+
+```
+##      Female        Male 
+## "18,625.29" "18,724.69"
+```
+
+```r
 meanbysex.TotDeptChg <- format(tapply(chf$TotDeptChg,chf$Sex2,mean),big.mark=",",big.interval=3,digits=2,nsmall=2)
 meanbysex.TotDeptChg
+```
+
+```
+##      Female        Male 
+## "18,007.78" "19,429.24"
 ```
 
 The mean value by gender for each variable is listed here:
@@ -116,22 +199,38 @@ The mean value by gender for each variable is listed here:
 
 ### Create a boxplot for Amount Paid by Medicare, Total Accomodation Charges, and Total Departmental Charges by gender
 
-```{r}
+
+```r
 # boxplot
 chf.m <- melt(chf,measure=c("AmtReim","TotAccomChg","TotDeptChg"),variable.name="Finance")
 ggplot(chf.m,aes(Finance,value)) +geom_boxplot(aes(fill=Sex2))
 ```
 
+![](LiveSessionAssignment09-Medicare_Admissions_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
+
 We can see from the boxplot that the amount reimbursed was significantly less than the Total Accomodation Charges and the Total Department Charges.  There are significant outliers for Total Accomodation Charges and Total Department Charges, and particulary for males.
 
 ### Create a histogram for Total Accomodation Charges, Gender, and Age Category, and describe what you see for each
 
-```{r}
+
+```r
 # histogram
 ggplot(chf,aes(TotAccomChg,fill=Sex2)) +geom_histogram(binwidth=10000,alpha=.6)
+```
+
+![](LiveSessionAssignment09-Medicare_Admissions_files/figure-html/unnamed-chunk-7-1.png)<!-- -->
+
+```r
 ggplot(chf,aes(Sex,fill=Sex2)) +geom_histogram(binwidth=1,alpha=.7)
+```
+
+![](LiveSessionAssignment09-Medicare_Admissions_files/figure-html/unnamed-chunk-7-2.png)<!-- -->
+
+```r
 ggplot(chf,aes(Age,fill=AgeGrp)) +geom_histogram(binwidth=1,alpha=.7)
 ```
+
+![](LiveSessionAssignment09-Medicare_Admissions_files/figure-html/unnamed-chunk-7-3.png)<!-- -->
 
 From the histogram of Total Accomodation Charges, we can see that the majority of accomodation charges were around $15-20k, but there is a long tail to the right showing that there were instances of accomodation charges between the range of $100-200k.
 
@@ -141,16 +240,20 @@ From the histogram of Age Category, we can see that the age group from 85-89 had
 
 ### Count of Gender for each admission source
 
-```{r}
+
+```r
 # bar plot of gender count by admission source
 ggplot(chf,aes(admsrc,fill=Sex2)) +geom_bar(alpha=.7,position="dodge")
 ```
+
+![](LiveSessionAssignment09-Medicare_Admissions_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
 
 From the bar plot, we see that admission source 7 (Emergency room) was the highest source of admission for both men and women, followed by admission source 1 (Physician referral) which had a slightly higher number for men than women.
 
 ### Mortality rate for MS-DRG 292 and MS-DRG 293
 
-```{r}
+
+```r
 # bar plot of mortality rate for MS-DRG 292 and MS-DRG 293
 mortrate292 <- subset(chf,drgcode==292, select=c(drgcode,Expired))
 mortrate293 <- subset(chf,drgcode==293, select=c(drgcode,Expired))
@@ -165,6 +268,9 @@ data <- data.frame(x,y)
 plot_ly(data, x=x, y=y, type='bar') %>% layout(title="Mortality Rate")
 ```
 
+<!--html_preserve--><div id="htmlwidget-6019b14fe6bd8e2020d0" style="width:672px;height:480px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-6019b14fe6bd8e2020d0">{"x":{"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Mortality Rate","xaxis":{"domain":[0,1],"type":"category","categoryorder":"array","categoryarray":["MS-DRG 292","MS-DRG 293"]},"yaxis":{"domain":[0,1]}},"config":{"modeBarButtonsToRemove":["sendDataToCloud"]},"base_url":"https://plot.ly","source":"A","data":[{"x":["MS-DRG 292","MS-DRG 293"],"y":[0.0208333333333333,0.0246913580246914],"type":"bar","marker":{"fillcolor":"rgba(31,119,180,1)","color":"rgba(31,119,180,1)","line":{"color":"transparent"}},"xaxis":"x","yaxis":"y"}]},"evals":[],"jsHooks":[]}</script><!--/html_preserve-->
+
 From the bar plot, we see that the mortality rate for MS-DRG 293 (.0247) is slightly higher than the mortality rate for MS-DRG 292 (.0208).
 
 ### T-test for the average length of stay for patients with MS-DRG 291 compared to the national average of 6 days
@@ -172,11 +278,26 @@ From the bar plot, we see that the mortality rate for MS-DRG 293 (.0247) is slig
 Ho: LOS for MS-DRG 291 = 6 days
 Ha: LOS for MS-DRG 291 <> 6 days
 
-```{r}
+
+```r
 # test LOS for patients with MS-DRG 291 versus national average of 6 days
 #     Ho: MS-DRG 291 LOS = 6 days
 #     Ha: MS-DRG 291 LOS <> 6 days
 t.test(subset(chf,drgcode==291,select=LOS),alternative="two.sided",mu=6,conf.level=0.95)
+```
+
+```
+## 
+## 	One Sample t-test
+## 
+## data:  subset(chf, drgcode == 291, select = LOS)
+## t = 5.2706, df = 164, p-value = 4.233e-07
+## alternative hypothesis: true mean is not equal to 6
+## 95 percent confidence interval:
+##  7.769979 9.890627
+## sample estimates:
+## mean of x 
+##  8.830303
 ```
 
 Using a 95% significance level results in a p-value of 0.0000004233; therefore, we reject the null hypotheis that the average length of stay for MS-DRG 291 patients is 6 days.  Instead, we accept the alternative hypothesis that the average length of stay for MS-DRG 291 patients is not equal to 6 days.

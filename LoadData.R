@@ -3,8 +3,8 @@
 
 ## Set the working directory and load packages
 setwd("/Users/pbyrd/Git/LiveSessionAssignment09")
-install.packages('ggplot2')
-install.packages('plotly')
+
+## Need to install the following packages: ggplot2 and plotly
 library('ggplot2')
 library('plotly')
 library('reshape2')
