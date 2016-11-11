@@ -37,16 +37,14 @@ ggplot(chf,aes(admsrc,fill=Sex2)) +geom_bar(alpha=.7,position="dodge")
 mortrate292 <- subset(chf,drgcode==292, select=c(drgcode,Expired))
 mortrate293 <- subset(chf,drgcode==293, select=c(drgcode,Expired))
 
-n292 <- nrow(mortrate292)
-n293 <- nrow(mortrate293)
+m292 <- nrow(mortrate292[mortrate292$Expired==1,])/nrow(mortrate292)
+m293 <- nrow(mortrate293[mortrate293$Expired==1,])/nrow(mortrate293)
 
-e292 <- nrow(na.omit(mortrate292$Expired))
-e293 <- nron(na.omit(mortrate293$Expired))
+x <- c('MS-DRG 292','MS-DRG 293')
+y <- c(m292, m293)
+data <- data.frame(x,y)
 
-
-ggplot(mortrate,aes(drgcode)) +geom_bar(alpha=.7)
-ggplot(subset(chf,drgcode==292|drgcode==293),aes(drgcode)) +geom_bar(alpha=.7)
-
+plot_ly(data, x=x, y=y, type='bar') %>% layout(title="Mortality Rate")
 
 # test LOS for patients with MS-DRG 291 versus national average of 6 days
 #     Ho: MS-DRG 291 LOS = 6 days

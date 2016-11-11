@@ -12,7 +12,6 @@ chf[chf$Age == 7, "AgeGrp"] = "80-84"
 chf[chf$Age == 8, "AgeGrp"] = "85-89"
 chf[chf$Age == 9, "AgeGrp"] = "90 and over"
 
-chf[chf$Sex == 0, "Sex2"] = 'Unknown'
 chf[chf$Sex == 1, "Sex2"] = 'Male'
 chf[chf$Sex == 2, "Sex2"] = "Female"
 

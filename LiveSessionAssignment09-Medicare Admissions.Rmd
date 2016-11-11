@@ -1,0 +1,172 @@
+---
+title: "LiveSessionAssignment09-Medicare Admissions"
+author: "Peter Byrd"
+date: "November 11, 2016"
+output: 
+  html_document:
+    keep_md: true
+---
+
+# Exploratory Data Analysis of Medicare Admissions
+
+## Introduction
+
+This analysis pulls data from the MedPAR dataset that is distributed by CMS, the entity that administers the Medicare program.  The dataset contains inpatient Medicare admissions.  
+
+## Load data
+First we must install packages and load the appropriate data from our data source.
+
+```{r}
+## Set the working directory and load packages
+setwd("/Users/pbyrd/Git/LiveSessionAssignment09")
+install.packages('ggplot2')
+install.packages('plotly')
+library('ggplot2')
+library('plotly')
+library('reshape2')
+
+## Read CSV input file
+chf <- read.csv("Data/CHF.csv", header=TRUE)
+```
+
+## Clean and Merge the data
+
+The data is relatively clean, but we need to add a few variables and rename a few variables to make the analysis easier.  This will create our final clean dataset.
+
+```{r}
+# clean and categorize 
+chf[chf$Age == 1, "AgeGrp"] = "less than 25"
+chf[chf$Age == 2, "AgeGrp"] = "25-44"
+chf[chf$Age == 3, "AgeGrp"] = "45-64"
+chf[chf$Age == 4, "AgeGrp"] = "65-69"
+chf[chf$Age == 5, "AgeGrp"] = "70-74"
+chf[chf$Age == 6, "AgeGrp"] = "75-79"
+chf[chf$Age == 7, "AgeGrp"] = "80-84"
+chf[chf$Age == 8, "AgeGrp"] = "85-89"
+chf[chf$Age == 9, "AgeGrp"] = "90 and over"
+
+chf[chf$Sex == 1, "Sex2"] = 'Male'
+chf[chf$Sex == 2, "Sex2"] = "Female"
+
+chf[chf$dischdest == 20, "Expired"] = 1
+chf[chf$dischdest != 20, "Expired"] = 0
+
+chf$Sex2 <- factor(chf$Sex2)
+chf$AgeGrp <- factor(chf$AgeGrp)
+chf$drgcode <- factor(chf$drgcode)
+```
+
+## Analyze the data
+
+Now that we have a clean dataset, we want to run some analysis on the data.  
+
+### Mean for Amount Paid by Medicare, Total Accommodations Charges, and Total Departmental Charges
+
+```{r}
+# mean amount paid by medicare, total accomodation charges, and total department charges
+mean.amtreim <- format(mean(chf$AmtReim), big.mark=",",big.interval=3,digits=2,nsmall=2)
+mean.TotAccomChg <- format(mean(chf$TotAccomChg), big.mark=",",big.interval=3,digits=2,nsmall=2)
+mean.TotDeptChg <- format(mean(chf$TotDeptChg), big.mark=",",big.interval=3,digits=2,nsmall=2)
+```
+
+The mean values for each variable are listed here:
+  Mean Amount Paid by Medicare:
+  Mean Total Accomodation Charges:
+  Mean Total Department Charges:
+
+### Standard deviation for Amount Paid by Medicare, Total Accomodation Charges, and Total Departmental Charges
+
+```{r}
+# standard deviation 
+std.amtreim <- format(sd(chf$AmtReim), big.mark=",",big.interval=3,digits=2,nsmall=2)
+std.TotAccomChg <- format(sd(chf$TotAccomChg),big.mark=",",big.interval=3,digits=2,nsmall=2)
+std.TotDeptChg <- format(sd(chf$TotDeptChg),big.mark=",",big.interval=3,digits=2,nsmall=2)
+```
+
+The standard deviations for each variable are listed here:
+  Standard Deviation of Amount Paid by Medicare:
+  Standard Deviation of Total Accomodation Charges:
+  Standard Deviation of Total Department Charges:
+
+### Use tapply() to calculate mean for Amount Paid by Medicare, Total Accomodataion Charges, adn Total Department Charges, by Gender
+
+```{r}
+# use tapply()
+meanbysex.amtreim <- format(tapply(chf$AmtReim,chf$Sex2,mean),big.mark=",",big.interval=3,digits=2,nsmall=2)
+meanbysex.TotAccomChg <- format(tapply(chf$TotAccomChg,chf$Sex2,mean),big.mark=",",big.interval=3,digits=2,nsmall=2)
+meanbysex.TotDeptChg <- format(tapply(chf$TotDeptChg,chf$Sex2,mean),big.mark=",",big.interval=3,digits=2,nsmall=2)
+```
+
+The mean value by gender for each variable is listed here:
+  Mean by Gender of Amount Paid by Medicare:
+  Mean by Gender of Total Accomodation Charges:
+  Mean by Gender of Total Department Charges:
+
+### Create a boxplot for Amount Paid by Medicare, Total Accomodation Charges, and Total Departmental Charges by gender
+
+```{r}
+# boxplot
+chf.m <- melt(chf,measure=c("AmtReim","TotAccomChg","TotDeptChg"),variable.name="Finance")
+ggplot(chf.m,aes(Finance,value)) +geom_boxplot(aes(fill=Sex2))
+```
+
+We can see from the boxplot that...
+
+### Create a histogram for Total Accomodation Charges, Gender, and Age Category, and describe what you see for each
+
+```{r}
+# histogram
+ggplot(chf,aes(TotAccomChg,fill=Sex2)) +geom_histogram(binwidth=10000,alpha=.6)
+ggplot(chf,aes(Sex,fill=Sex2)) +geom_histogram(binwidth=1,alpha=.7)
+ggplot(chf,aes(Age,fill=AgeGrp)) +geom_histogram(binwidth=1,alpha=.7)
+```
+
+From the histogram of Total Accomodation Charges, we can see that...
+
+From the histogram of Gender, we can see that...
+
+From the histogram of Age Category, we can see that...
+
+### Count of Gender for each admission source
+
+```{r}
+# bar plot of gender count by admission source
+ggplot(chf,aes(admsrc,fill=Sex2)) +geom_bar(alpha=.7,position="dodge")
+```
+
+From the bar plot, we see that...
+
+### Mortality rate for MS-DRG 292 and MS-DRG 293
+
+```{r}
+# bar plot of mortality rate for MS-DRG 292 and MS-DRG 293
+mortrate292 <- subset(chf,drgcode==292, select=c(drgcode,Expired))
+mortrate293 <- subset(chf,drgcode==293, select=c(drgcode,Expired))
+
+m292 <- nrow(mortrate292[mortrate292$Expired==1,])/nrow(mortrate292)
+m293 <- nrow(mortrate293[mortrate293$Expired==1,])/nrow(mortrate293)
+
+x <- c('MS-DRG 292','MS-DRG 293')
+y <- c(m292, m293)
+data <- data.frame(x,y)
+
+plot_ly(data, x=x, y=y, type='bar') %>% layout(title="Mortality Rate")
+```
+
+From the bar plot, we see that...
+
+### T-test for the average length of stay for patients with MS-DRG 291 compared to the national average of 6 days
+
+Ho: LOS for MS-DRG 291 = 6 days
+Ha: LOS for MS-DRG 291 <> 6 days
+
+```{r}
+# test LOS for patients with MS-DRG 291 versus national average of 6 days
+#     Ho: MS-DRG 291 LOS = 6 days
+#     Ha: MS-DRG 291 LOS <> 6 days
+t.test(subset(chf,drgcode==291,select=LOS),alternative="two.sided",mu=6,conf.level=0.95)
+```
+
+Using a 95% significance level with a p-value of xxxxx, we reject the null hypotheis that the average length of stay for MS-DRG 291 patients is 6 days.  Instead, we accept the alternative hypothesis that the average length of stay for MS-DRG 291 patients is not equal to 6 days.
+
+# End of Assignment
