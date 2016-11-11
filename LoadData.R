@@ -3,9 +3,11 @@
 
 ## Set the working directory and load packages
 setwd("/Users/pbyrd/Git/LiveSessionAssignment09")
-library(plyr)
-library(dplyr)
+install.packages(ggplot2)
+install.packages(plotly)
 library(ggplot2)
+library(plotly)
+library(reshape2)
 
 ## Read CSV input file
 chf <- read.csv("Data/CHF.csv", header=TRUE)
