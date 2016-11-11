@@ -268,8 +268,8 @@ data <- data.frame(x,y)
 plot_ly(data, x=x, y=y, type='bar') %>% layout(title="Mortality Rate")
 ```
 
-<!--html_preserve--><div id="htmlwidget-6019b14fe6bd8e2020d0" style="width:672px;height:480px;" class="plotly html-widget"></div>
-<script type="application/json" data-for="htmlwidget-6019b14fe6bd8e2020d0">{"x":{"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Mortality Rate","xaxis":{"domain":[0,1],"type":"category","categoryorder":"array","categoryarray":["MS-DRG 292","MS-DRG 293"]},"yaxis":{"domain":[0,1]}},"config":{"modeBarButtonsToRemove":["sendDataToCloud"]},"base_url":"https://plot.ly","source":"A","data":[{"x":["MS-DRG 292","MS-DRG 293"],"y":[0.0208333333333333,0.0246913580246914],"type":"bar","marker":{"fillcolor":"rgba(31,119,180,1)","color":"rgba(31,119,180,1)","line":{"color":"transparent"}},"xaxis":"x","yaxis":"y"}]},"evals":[],"jsHooks":[]}</script><!--/html_preserve-->
+<!--html_preserve--><div id="htmlwidget-f419e1c8283cacddef67" style="width:672px;height:480px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-f419e1c8283cacddef67">{"x":{"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Mortality Rate","xaxis":{"domain":[0,1],"type":"category","categoryorder":"array","categoryarray":["MS-DRG 292","MS-DRG 293"]},"yaxis":{"domain":[0,1]}},"config":{"modeBarButtonsToRemove":["sendDataToCloud"]},"base_url":"https://plot.ly","source":"A","data":[{"x":["MS-DRG 292","MS-DRG 293"],"y":[0.0208333333333333,0.0246913580246914],"type":"bar","marker":{"fillcolor":"rgba(31,119,180,1)","color":"rgba(31,119,180,1)","line":{"color":"transparent"}},"xaxis":"x","yaxis":"y"}]},"evals":[],"jsHooks":[]}</script><!--/html_preserve-->
 
 From the bar plot, we see that the mortality rate for MS-DRG 293 (.0247) is slightly higher than the mortality rate for MS-DRG 292 (.0208).
 
